@@ -1,0 +1,137 @@
+__author__ = "Itamar Eliakim / CaPow Technologies LTD"
+__maintainer__ = "Itamar Eliakim"
+__email__ = "itamar@rootiebot.com"
+
+# Configurations
+MSG_ID_CONFIG_SET = 16
+MSG_ID_CONFIG_DEFAULT = 17
+MSG_ID_CONFIG_READ = 18
+MSG_ID_CONFIG_SAVE = 19
+MSG_ID_CONFIG_FPGA_READ_SINGLE = 20
+MSG_ID_CONFIG_FPGA_SET_SINGLE = 21
+MSG_ID_CONFIG_SENSOR_READ_SINGLE = 22
+MSG_ID_CONFIG_SENSOR_SET_SINGLE = 23
+MSG_ID_CONFIG_VARIANT_READ_SINGLE = 24
+MSG_ID_CONFIG_VARIANT_SET_SINGLE = 25
+MSG_ID_CONFIG_RESET = 26
+
+# Host<->MCU Sensor Data
+MSG_ID_SENSOR_GET = 27
+MSG_ID_SENSOR_SET = 28
+MSG_ID_SENSOR_TRANSMIT = 29
+
+# Host<->MCU FPGA Protect Stream
+MSG_ID_FPGA_PROTECT_STREAM_CMD = 30
+MSG_ID_FPGA_PROTECT_STREAM_TRANSMIT = 31
+MSG_ID_FPGA_FAULT = 32
+
+# Host<->MCU Sensor Stream
+MSG_ID_SENSOR_STREAM_CMD = 33
+MSG_ID_SENSOR_STREAM_TRANSMIT_SHORT = 34
+MSG_ID_SENSOR_STREAM_TRANSMIT_LONG = 35
+MSG_ID_SENSOR_FAULT = 36
+
+# Host<->MCU NIBB Configuration
+MSG_ID_NIBB_SET = 37
+MSG_ID_NIBB_GET = 38
+
+# Host<->MCU State Machine
+MSG_ID_STATE_MACHINE_SET = 39
+MSG_ID_STATE_MACHINE_GET = 40
+
+# Host<->MCU NIBB System
+MSG_ID_VARIANT_GET = 41
+MSG_ID_APPLICATION_VERSION_GET = 42
+
+# Host<->MCU NIBB System
+MSG_ID_HEALTH_MONITOR_SET = 43
+MSG_ID_HEALTH_MONITOR_GET = 44
+
+# Host<->MCU Developer UI
+MSG_ID_ACK = 45
+MSG_ID_LOGGER = 46
+MSG_ID_UI_KEEP_ALIVE = 47
+MSG_ID_UI_TASK_WARNING = 48
+MSG_ID_FAULTY_SENSOR = 49
+MSG_ID_FAULTY_SENSOR_ACK = 50
+MSG_ID_CLOSE_CONNECTION = 51
+MSG_ID_UI_DEBUG_NOTIFICATION = 52
+
+#Flash Logger<->MCU Developer UI
+MSG_ID_FLASH_LOGGER_GET_CHUNK = 53
+MSG_ID_FLASH_LOGGER_SET_CHUNK = 54
+MSG_ID_FLASH_LOGGER_SAVE = 55
+MSG_ID_FLASH_LOGGER_SYNC_CLOCK = 56
+MSG_ID_FLASH_LOGGER_RESET = 57
+MSG_ID_FLASH_LOGGER_LOAD = 58
+
+#System Reset
+MSG_ID_SYSTEM_RESET = 59
+MSG_ID_ENERGY_CALCULATION_GET = 60
+
+#SD Logger
+MSG_ID_SD_LOGGER_PREPARE_TO_SEND_DATA = 61
+MSG_ID_SD_LOGGER_GET_NUMBER_OF_CHUNKS = 62
+MSG_ID_SD_LOGGER_GET_CHUNK = 63
+
+MSG_ID_FPGA_RESET = 64
+
+#Firmware Upgrade
+MSG_ID_BOOTLOADER_CHUNK_REQ = 100
+MSG_ID_BOOTLOADER_CHUNK_DATA = 101
+MSG_ID_BOOTLOADER_INFO_REQ = 102
+MSG_ID_BOOTLOADER_INFO_DATA = 103
+MSG_ID_BOOTLOADER_BOOT_STATE = 104
+MSG_ID_BOOTLOADER_RESET = 105
+
+#System Operation Mode
+MSG_ID_OPERATION_MODE_CMD = 200
+MSG_ID_OPERATION_MODE_TRANSMIT = 201
+
+MCU_VARIANT = ["TX", "RX"]
+
+FPGA_VARIANT = { 170: "TX",
+                 187: "RX",
+                 0xFF: "NONE"}
+
+WORK_STATES = {"TX": {0: "DISABLED",
+                        1: "DISABLED",
+                        2: "STANDBY",
+                        4: "PILOT",
+                        8: "RAMP_UP",
+                        16: "CLOSE_PHASE",
+                        32: "NOMINAL",
+                        64: "BADLOAD"},
+                "RX": {0: "DISABLED",
+                        1: "DISABLED",
+                        2: "STANDBY",
+                        4: "MONITOR",
+                        8: "ACTIVE",
+                        16: "DISCHARGE"}}
+
+DEVELOPER_STATES = {"TX": {0: "DISABLED",
+                        1: "DISABLED",
+                        2: "STANDBY",
+                        4: "PILOT",
+                        8: "RAMP_UP",
+                        16: "CLOSE_PHASE",
+                        32: "NOMINAL",
+                        64: "BADLOAD"},
+                    "RX": {0: "DISABLED",
+                            1: "DISABLED",
+                            2: "STANDBY",
+                            4: "MONITOR",
+                            8: "ACTIVE",
+                            16: "DISCHARGE"}}
+
+MODE_STATES = ["SLEEP",
+               "WORK",
+               "DIAGNOSTICS",
+               "CALIBRATION",
+               "DEVELOPER",
+               "FIRMWARE_UPGRADE"]
+
+SENSOR_STATUS = ["DISABLED", "LOCKOUT", "RETRY", "PROTECT"]
+SENSOR_PERIPHERAL_STATE = ["OK", "TIMEOUT", "NR", "NC"]
+
+OPERATION_MODES = ["NONE", "BOOTLOADER_WAIT_FOR_IMAGE", "BOOTLOADER_IN_IMAGE_FLASH", "BOOTLOADER_COPY_SLOT_TO_APP", "BOOTLOADER_START_APP", "APPLICATION_RUN", "APPLICATION_HALT", "APPLICATION_FAULT"]
