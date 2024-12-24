@@ -4,8 +4,6 @@ import time
 import queue
 from board_comm import BoardComm
 from constants import *
-# from messages import *
-
 
 message_queue = queue.Queue()
 stop_event = threading.Event()
@@ -63,19 +61,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as soc
                     IsParing = False
 
                 else:
-                    # print(f"send_data_to_device: {message}")
-
                     match message:
                         case 201:
                             board_comm.sendOperationMode()
                             print("Case 1: Sending 201")
                         case 41:
-                            print("Case 2: Sending 41")
                             board_comm.sendVariant()
+                            print("Case 2: Sending 41")
+                        case 42:
+                            board_comm.sendApplicationVersion()
+                            print("Case 3: Sending 42")
                         case _:
                             print("Default case executed")
-                        # board_comm.sendOperationMode()
-                        # board_comm._tf.send(message, b'1')  # Example: Send using TinyFrame
 
             except queue.Empty:
                 pass  
