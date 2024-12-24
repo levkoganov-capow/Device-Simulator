@@ -15,7 +15,7 @@ class TinyFrame:
 
         #  Checksum type
         # ('none', 'xor', 'crc16, 'crc32'
-        self.CKSUM_TYPE = 'xor'
+        self.CKSUM_TYPE = 'xor' #'xor' # use crc16
 
         #  Use a SOF byte to mark the start of a frame
         self.USE_SOF_BYTE = True

@@ -30,9 +30,9 @@ class CommUDPAPI():
         self.esp32_ip = esp32_ip
         self.esp32_variant = esp32_variant
 
-        self.close_port(self.UDP_BROADCAST_PORT)
-        self.close_port(self.UDP_ESP32_PORT)
-        self.close_port(self.UDP_PYTHON_PORT)
+        # self.close_port(self.UDP_BROADCAST_PORT)
+        # self.close_port(self.UDP_ESP32_PORT)
+        # self.close_port(self.UDP_PYTHON_PORT)
 
         self.in_pairing = True
 

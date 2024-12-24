@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from payload_parser import TF_Msg, TF
-from sensors_name import *
+# from sensors_name import *
 from messages import *
 import pycstruct
 import time
