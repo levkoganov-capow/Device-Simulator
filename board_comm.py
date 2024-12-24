@@ -22,12 +22,51 @@ class BoardComm():
         
         self._tf.add_type_listener(MSG_ID_OPERATION_MODE_CMD, self.operationModeCallback)
         self._tf.add_type_listener(MSG_ID_VARIANT_GET, self.variantCallback)
+        self._tf.add_type_listener(MSG_ID_APPLICATION_VERSION_GET, self.applicationVersionCallback)
 
     def operationModeCallback(self, frame, data):
         self.message_queue.put(MSG_ID_OPERATION_MODE_TRANSMIT)
 
     def variantCallback(self, frame, data):
         self.message_queue.put(MSG_ID_VARIANT_GET)
+
+    def applicationVersionCallback(self, frame, data):
+        self.message_queue.put(MSG_ID_APPLICATION_VERSION_GET)
+
+    def sendOperationMode(self):
+        output = {}
+        output["mode"] = 5
+        self._tf.send(MSG_ID_OPERATION_MODE_TRANSMIT, definitions["retOperationMode_t"].serialize(output))
+
+    def sendVariant(self):
+        output = {}
+        output["fpga_variant"] = 187     
+        output["mcu_variant"] = 1 
+        self._tf.send(MSG_ID_VARIANT_GET, definitions["variantData_t"].serialize(output))
+
+    def sendApplicationVersion(self):
+        output = {}
+
+        output["mcu_ver"] = {}
+        output["mcu_ver"]["major"] = 1  
+        output["mcu_ver"]["minor"] = 2  
+        output["mcu_ver"]["patch"] = 5  
+
+
+        output["fpga_ver"] = {}
+        output["fpga_ver"]["major"] = 3  
+        output["fpga_ver"]["minor"] = 0  
+        output["fpga_ver"]["patch"] = 0  
+
+
+        output["bootloader_ver"] = {}
+        output["bootloader_ver"]["major"] = 0  
+        output["bootloader_ver"]["minor"] = 9  
+        output["bootloader_ver"]["patch"] = 1
+
+        print(output)
+
+        self._tf.send(MSG_ID_APPLICATION_VERSION_GET, definitions["versionData_t"].serialize(output))
 
     def serialWrite(self, buf):
         if self.sock:
@@ -37,14 +76,3 @@ class BoardComm():
                 print(f"Error sending data: {e}")
         else:
             print("No socket provided to send data")
-
-    def sendOperationMode(self):
-        output = {}
-        output["mode"] = 5
-        self._tf.send(MSG_ID_OPERATION_MODE_TRANSMIT, definitions["retOperationMode_t"].serialize(output)) #  output = 5
-
-    def sendVariant(self):
-        output = {}
-        output["fpga_variant"] = 187     
-        output["mcu_variant"] = 187 
-        self._tf.send(MSG_ID_VARIANT_GET, definitions["variantData_t"].serialize(output)) #  output = 5
