@@ -4,9 +4,18 @@ import time
 import queue
 from board_comm import BoardComm
 from constants import *
+from messages import *
 
 message_queue = queue.Queue()
 stop_event = threading.Event()
+
+class MsgIDs:
+    MSG_ID_OPERATION_MODE_TRANSMIT = MSG_ID_OPERATION_MODE_TRANSMIT
+    MSG_ID_VARIANT_GET = MSG_ID_VARIANT_GET
+    MSG_ID_APPLICATION_VERSION_GET = MSG_ID_APPLICATION_VERSION_GET
+    MSG_ID_UI_KEEP_ALIVE = MSG_ID_UI_KEEP_ALIVE
+    MSG_ID_WHITE_LOG_RESPONSE = MSG_ID_WHITE_LOG_RESPONSE
+    MSG_ID_ENERGY_CALCULATION_GET = MSG_ID_ENERGY_CALCULATION_GET
 
 # Create the UDP socket
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as sock:
@@ -61,16 +70,26 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as soc
                     IsParing = False
 
                 else:
+
                     match message:
-                        case 201:
+                        case MsgIDs.MSG_ID_OPERATION_MODE_TRANSMIT:
                             board_comm.sendOperationMode()
                             print("Case 1: Sending 201")
-                        case 41:
+                        case MsgIDs.MSG_ID_VARIANT_GET:
                             board_comm.sendVariant()
                             print("Case 2: Sending 41")
-                        case 42:
+                        case MsgIDs.MSG_ID_APPLICATION_VERSION_GET:
                             board_comm.sendApplicationVersion()
                             print("Case 3: Sending 42")
+                        case MsgIDs.MSG_ID_UI_KEEP_ALIVE:
+                            board_comm.sendKeepAlive()
+                            print("Case 4: Sending 47")
+                        case MsgIDs.MSG_ID_WHITE_LOG_RESPONSE:
+                            board_comm.sendWhiteLog()
+                            print("Case 5: Sending 53")
+                        case MsgIDs.MSG_ID_ENERGY_CALCULATION_GET:
+                            board_comm.sendEnergyCalculation()
+                            print("Case 6: Sending 61")
                         case _:
                             print("Default case executed")
 

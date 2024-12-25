@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import random
+import time
 from constants import TARGET_IP, TARGET_PORT
 from messages import *
 import pycstruct
@@ -17,13 +19,19 @@ class BoardComm():
         self._tf.SOF_BYTE = 0xAA
         self._tf.write = self.serialWrite
 
+        self._last_ui_keep_alive = time.time()
         self.message_queue = message_queue
         self.sock = sock
         
+        # Listeners
         self._tf.add_type_listener(MSG_ID_OPERATION_MODE_CMD, self.operationModeCallback)
         self._tf.add_type_listener(MSG_ID_VARIANT_GET, self.variantCallback)
         self._tf.add_type_listener(MSG_ID_APPLICATION_VERSION_GET, self.applicationVersionCallback)
+        self._tf.add_type_listener(MSG_ID_UI_KEEP_ALIVE, self.keepAliveCallback)
+        self._tf.add_type_listener(MSG_ID_WHITE_LOG_REQUEST,self.whiteLogCallback)
+        self._tf.add_type_listener(MSG_ID_ENERGY_CALCULATION_GET,self.energyCalculationCallback)
 
+    # Callback
     def operationModeCallback(self, frame, data):
         self.message_queue.put(MSG_ID_OPERATION_MODE_TRANSMIT)
 
@@ -33,6 +41,16 @@ class BoardComm():
     def applicationVersionCallback(self, frame, data):
         self.message_queue.put(MSG_ID_APPLICATION_VERSION_GET)
 
+    def keepAliveCallback(self, frame, data):
+        self.message_queue.put(MSG_ID_UI_KEEP_ALIVE)
+
+    def whiteLogCallback(self, frame, data):
+        self.message_queue.put(MSG_ID_WHITE_LOG_RESPONSE)
+
+    def energyCalculationCallback(self, frame, data):
+        self.message_queue.put(MSG_ID_ENERGY_CALCULATION_GET)
+
+    # Send
     def sendOperationMode(self):
         output = {}
         output["mode"] = 5
@@ -52,22 +70,51 @@ class BoardComm():
         output["mcu_ver"]["minor"] = 2  
         output["mcu_ver"]["patch"] = 5  
 
-
         output["fpga_ver"] = {}
         output["fpga_ver"]["major"] = 3  
         output["fpga_ver"]["minor"] = 0  
         output["fpga_ver"]["patch"] = 0  
 
-
         output["bootloader_ver"] = {}
         output["bootloader_ver"]["major"] = 0  
         output["bootloader_ver"]["minor"] = 9  
         output["bootloader_ver"]["patch"] = 1
-
-        print(output)
-
+        
         self._tf.send(MSG_ID_APPLICATION_VERSION_GET, definitions["versionData_t"].serialize(output))
 
+    def sendKeepAlive(self):
+        output = {}
+        output["val"] = 1
+        self._tf.send(MSG_ID_UI_KEEP_ALIVE, definitions["StandardCmd_t"].serialize(output))
+
+    # def sendWhiteLog(self):
+    #     output = {}
+    #     output["chunk"] = 1
+    #     # output["data"] = "A" * 1000
+    #     # output["data"] = "Sample log data".ljust(1000, "\0") # Adjusted to hold 1000 bytes
+    #     output["data"] = "Sample log data"
+    #     self._tf.send(MSG_ID_WHITE_LOG_RESPONSE, definitions["SdLoggerChunk_t"].serialize(output))
+
+    def sendWhiteLog(self):
+        output = {}
+        example_data = b"Example data" # Convert string to bytes
+        print(example_data)
+
+        output["data"] = example_data
+        self._tf.send(MSG_ID_WHITE_LOG_RESPONSE, definitions["DebugNotificationResponse_t"].serialize(output))
+
+    def sendEnergyCalculation(self):
+        output = {}
+        output["vlv"] = 360 + random.randint(-100, 100)
+        output["vlv_timestamp"] = 167253 + random.randint(-167253, 167253)
+        output["ilv"] = 100 + random.randint(-20, 20)
+        output["ilv_timestamp"] = 167253 + random.randint(-167253, 167253)
+        output["health_status"] = 1
+        output["state_machine_mode_state"] = 1
+        output["state_machine_current_state"] = 1
+        self._tf.send(MSG_ID_ENERGY_CALCULATION_GET, definitions["retEnergyCalculation_t"].serialize(output))
+
+    # Socket send
     def serialWrite(self, buf):
         if self.sock:
             try:
