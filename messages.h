@@ -312,6 +312,12 @@ typedef struct{
 	char data[128];
 }SdLoggerChunk_t;
 
+//NEW DEBUG NOTIFICATION
+typedef struct 
+{
+	uint8_t data[1000];
+}DebugNotificationResponse_t;
+
 typedef struct {
 	uint16_t chunk;
 	uint8_t state;
