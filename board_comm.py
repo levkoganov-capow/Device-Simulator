@@ -87,20 +87,16 @@ class BoardComm():
         output["val"] = 1
         self._tf.send(MSG_ID_UI_KEEP_ALIVE, definitions["StandardCmd_t"].serialize(output))
 
-    # def sendWhiteLog(self):
-    #     output = {}
-    #     output["chunk"] = 1
-    #     # output["data"] = "A" * 1000
-    #     # output["data"] = "Sample log data".ljust(1000, "\0") # Adjusted to hold 1000 bytes
-    #     output["data"] = "Sample log data"
-    #     self._tf.send(MSG_ID_WHITE_LOG_RESPONSE, definitions["SdLoggerChunk_t"].serialize(output))
-
     def sendWhiteLog(self):
-        output = {}
-        example_data = b"Example data" # Convert string to bytes
-        print(example_data)
+        options = ["[**EXAMPLE**]Monitor to DISCHARGE - low IHV[**EXAMPLE**]", "[**EXAMPLE**]Transiet to discharge monitor[**EXAMPLE**]", "[**EXAMPLE**]Active monitor[**EXAMPLE**]"]
+        dummy_data = random.choice(options) + "\n"
 
-        output["data"] = example_data
+        output = {}
+        output['frame_id'] = 1
+        output["len"] = 1000
+        output["type"] = MSG_ID_WHITE_LOG_RESPONSE
+        output["data"] = bytes(dummy_data, "utf-8")  # Ensure it's a bytes object
+        print(output)
         self._tf.send(MSG_ID_WHITE_LOG_RESPONSE, definitions["DebugNotificationResponse_t"].serialize(output))
 
     def sendEnergyCalculation(self):
